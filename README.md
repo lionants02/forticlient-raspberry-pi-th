@@ -261,6 +261,10 @@ if pgrep -f "openfortivpn.*${CONFIG}" >/dev/null; then
   exit 0
 fi
 
+echo "VPN start time:"
+date
+echo
+
 sudo /usr/bin/openfortivpn -c "$CONFIG"
 ```
 
@@ -329,7 +333,7 @@ vim ~/Desktop/VPN-Connect.desktop
 Type=Application
 Name=VPN Connect
 Comment=Connect Fortinet SSL VPN and keep terminal open
-Exec=lxterminal -e bash -lc "sudo openfortivpn -c /etc/openfortivpn/company.conf; echo; echo 'VPN disconnected. Press Enter to close this window.'; read"
+Exec=lxterminal -e bash -lc "echo 'VPN start time:'; date; echo; sudo openfortivpn -c /etc/openfortivpn/company.conf; echo; echo 'VPN disconnected. Press Enter to close this window.'; read"
 Icon=network-vpn
 Terminal=false
 Categories=Network;
@@ -344,10 +348,11 @@ chmod +x ~/Desktop/VPN-Connect.desktop
 วิธีใช้งาน:
 
 1. ดับเบิลคลิก `VPN Connect` บน Desktop
-2. ใส่ password/OTP ใน terminal ที่เปิดขึ้นมา
-3. เปิดหน้าต่าง terminal นี้ค้างไว้ตลอดเวลาที่ต้องการใช้ VPN
-4. ถ้าต้องการปิด VPN ให้กด `Ctrl+C` ในหน้าต่าง terminal นั้น
-5. หลัง VPN ตัดแล้ว กด `Enter` เพื่อปิดหน้าต่าง
+2. terminal จะแสดงวันเวลาเริ่ม VPN จากคำสั่ง `date`
+3. ใส่ password/OTP ใน terminal ที่เปิดขึ้นมา
+4. เปิดหน้าต่าง terminal นี้ค้างไว้ตลอดเวลาที่ต้องการใช้ VPN
+5. ถ้าต้องการปิด VPN ให้กด `Ctrl+C` ในหน้าต่าง terminal นั้น
+6. หลัง VPN ตัดแล้ว กด `Enter` เพื่อปิดหน้าต่าง
 
 ถ้า Desktop ถามว่า Trust หรือ Allow Launching ให้คลิกอนุญาตก่อนใช้งาน
 
