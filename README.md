@@ -99,6 +99,21 @@ username = your_username
 # trusted-cert = 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
 ```
 
+### กรณี URL ที่ได้รับเป็น `https://ip-address:10443/vpn`
+
+อย่าใส่ `https://`, port, หรือ path ลงในค่า `host` เพราะ `openfortivpn` จะเอาค่า `host` ไป resolve เป็นชื่อเครื่องโดยตรง ถ้าใส่ทั้ง URL จะเจอ error เช่น `getaddrinfo: Name or service not known`
+
+ให้แยกค่าแบบนี้:
+
+```ini
+host = ip-address
+port = 10443
+username = my-vpn-user
+realm = vpn
+```
+
+ถ้า `ip-address` ในตัวอย่างคือ IP จริง ให้ใส่เฉพาะ IP เช่น `192.0.2.10` หรือถ้าเป็นชื่อ DNS ให้ใส่เฉพาะชื่อ เช่น `vpn.example.com` ส่วน `/vpn` มักเป็น realm ของ FortiGate SSL VPN จึงใส่เป็น `realm = vpn`
+
 ตั้ง permission ให้ไฟล์ config:
 
 ```bash
@@ -388,6 +403,35 @@ sudo openfortivpn -c /etc/openfortivpn/company.conf --saml-login
 ## Troubleshooting
 
 ถ้าเชื่อมต่อไม่ได้ ให้ลองตรวจสอบตามนี้
+
+ถ้าเจอ error นี้:
+
+```text
+ERROR:  getaddrinfo: Name or service not known
+```
+
+ให้ตรวจสอบว่า `host` ไม่มี `https://`, ไม่มี port, และไม่มี path เช่น `/vpn`
+
+ตัวอย่างที่ผิด:
+
+```ini
+host = https://ip-address:10443/vpn
+port = 10443
+```
+
+ตัวอย่างที่ถูก:
+
+```ini
+host = ip-address
+port = 10443
+realm = vpn
+```
+
+ถ้าแก้ config แล้วขึ้น `connect: Connection refused` ให้ตรวจสอบว่า IP/port ถูกต้องและ FortiGate เปิด SSL VPN port นั้นจริง:
+
+```bash
+curl -vk https://ip-address:10443/vpn
+```
 
 ตรวจสอบ log:
 
