@@ -301,13 +301,20 @@ vpn-down
 
 ## สร้างปุ่มบนหน้าจอ Desktop
 
-ส่วนนี้สร้างไอคอนบน Desktop 2 ปุ่ม คือ Connect และ Disconnect
+ส่วนนี้มี 2 แบบให้เลือก:
+
+- แบบแนะนำ: ปุ่ม Connect ปุ่มเดียว เปิด terminal ค้างไว้ แล้วปิด VPN ด้วย `Ctrl+C`
+- แบบแยกปุ่ม: Connect และ Disconnect โดยเรียกสคริปต์ `vpn-up` / `vpn-down`
 
 ถ้ายังไม่มีโฟลเดอร์ Desktop ให้สร้างก่อน:
 
 ```bash
 mkdir -p ~/Desktop
 ```
+
+### แบบแนะนำ: ปุ่ม Connect ที่เปิด terminal ค้างไว้
+
+วิธีนี้เหมาะกับการใช้งานปกติ เพราะเห็น log บนหน้าจอ กรอก password/OTP ได้ และปิด VPN ได้ด้วย `Ctrl+C`
 
 สร้างไฟล์ปุ่ม Connect:
 
@@ -321,6 +328,43 @@ vim ~/Desktop/VPN-Connect.desktop
 [Desktop Entry]
 Type=Application
 Name=VPN Connect
+Comment=Connect Fortinet SSL VPN and keep terminal open
+Exec=lxterminal -e bash -lc "sudo openfortivpn -c /etc/openfortivpn/company.conf; echo; echo 'VPN disconnected. Press Enter to close this window.'; read"
+Icon=network-vpn
+Terminal=false
+Categories=Network;
+```
+
+ตั้ง permission:
+
+```bash
+chmod +x ~/Desktop/VPN-Connect.desktop
+```
+
+วิธีใช้งาน:
+
+1. ดับเบิลคลิก `VPN Connect` บน Desktop
+2. ใส่ password/OTP ใน terminal ที่เปิดขึ้นมา
+3. เปิดหน้าต่าง terminal นี้ค้างไว้ตลอดเวลาที่ต้องการใช้ VPN
+4. ถ้าต้องการปิด VPN ให้กด `Ctrl+C` ในหน้าต่าง terminal นั้น
+5. หลัง VPN ตัดแล้ว กด `Enter` เพื่อปิดหน้าต่าง
+
+ถ้า Desktop ถามว่า Trust หรือ Allow Launching ให้คลิกอนุญาตก่อนใช้งาน
+
+### แบบแยกปุ่ม Connect และ Disconnect
+
+สร้างไฟล์ปุ่ม Connect:
+
+```bash
+vim ~/Desktop/VPN-Connect-Script.desktop
+```
+
+ใส่เนื้อหานี้:
+
+```ini
+[Desktop Entry]
+Type=Application
+Name=VPN Connect Script
 Comment=Connect Fortinet SSL VPN
 Exec=lxterminal -e bash -lc "vpn-up; echo; read -p 'Press Enter to close...'"
 Icon=network-vpn
@@ -350,7 +394,7 @@ Categories=Network;
 ตั้ง permission:
 
 ```bash
-chmod +x ~/Desktop/VPN-Connect.desktop ~/Desktop/VPN-Disconnect.desktop
+chmod +x ~/Desktop/VPN-Connect-Script.desktop ~/Desktop/VPN-Disconnect.desktop
 ```
 
 ถ้า Desktop ถามว่า Trust หรือ Allow Launching ให้คลิกอนุญาตก่อนใช้งาน
