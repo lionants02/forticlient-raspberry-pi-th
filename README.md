@@ -1,4 +1,13 @@
+# คู่มือติดตั้ง FortiClient VPN บน Raspberry Pi
+
+คู่มือนี้อธิบายวิธีใช้งาน VPN ของ Fortinet/FortiGate บน Raspberry Pi พร้อมวิธีสร้างคำสั่งและปุ่มบนหน้าจอสำหรับกดเปิด/ปิด VPN
+
+> หมายเหตุสำคัญ: Raspberry Pi ส่วนใหญ่ใช้สถาปัตยกรรม ARM/ARM64 เช่น `armv7l` หรือ `aarch64` แต่ FortiClient VPN แบบ official สำหรับ Linux มักเป็นแพ็กเกจสำหรับเครื่อง x86_64/amd64 จึงติดตั้ง `.deb` ของ FortiClient โดยตรงบน Raspberry Pi ไม่ได้ในหลายกรณี แนวทางที่ใช้ได้จริงบน Raspberry Pi คือใช้ `openfortivpn` ซึ่งเป็น client แบบ command line ที่รองรับ Fortinet SSL VPN
+
+## สารบัญ
+
 - [คู่มือติดตั้ง FortiClient VPN บน Raspberry Pi](#คู่มือติดตั้ง-forticlient-vpn-บน-raspberry-pi)
+  - [สารบัญ](#สารบัญ)
   - [ภาพรวม](#ภาพรวม)
   - [สิ่งที่ต้องเตรียม](#สิ่งที่ต้องเตรียม)
   - [ติดตั้งแพ็กเกจ](#ติดตั้งแพ็กเกจ)
@@ -12,12 +21,8 @@
   - [ใช้งานกับ SAML/SSO หรือ OTP](#ใช้งานกับ-samlsso-หรือ-otp)
   - [Troubleshooting](#troubleshooting)
   - [ถอนการติดตั้ง](#ถอนการติดตั้ง)
-
-# คู่มือติดตั้ง FortiClient VPN บน Raspberry Pi
-
-คู่มือนี้อธิบายวิธีใช้งาน VPN ของ Fortinet/FortiGate บน Raspberry Pi พร้อมวิธีสร้างคำสั่งและปุ่มบนหน้าจอสำหรับกดเปิด/ปิด VPN
-
-> หมายเหตุสำคัญ: Raspberry Pi ส่วนใหญ่ใช้สถาปัตยกรรม ARM/ARM64 เช่น `armv7l` หรือ `aarch64` แต่ FortiClient VPN แบบ official สำหรับ Linux มักเป็นแพ็กเกจสำหรับเครื่อง x86_64/amd64 จึงติดตั้ง `.deb` ของ FortiClient โดยตรงบน Raspberry Pi ไม่ได้ในหลายกรณี แนวทางที่ใช้ได้จริงบน Raspberry Pi คือใช้ `openfortivpn` ซึ่งเป็น client แบบ command line ที่รองรับ Fortinet SSL VPN
+  - [อ้างอิง](#อ้างอิง)
+  - [เครดิต](#เครดิต)
 
 ## ภาพรวม
 
@@ -455,3 +460,7 @@ sudo rm -rf /etc/openfortivpn
 ## อ้างอิง
 
 - `openfortivpn`: <https://github.com/adrienverge/openfortivpn>
+
+## เครดิต
+
+เอกสารนี้สร้างโดย Codex ใช้โมเดล GPT-5
