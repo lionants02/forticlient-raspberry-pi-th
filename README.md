@@ -12,6 +12,8 @@
   - [สิ่งที่ต้องเตรียม](#สิ่งที่ต้องเตรียม)
   - [ติดตั้งแพ็กเกจ](#ติดตั้งแพ็กเกจ)
   - [สร้างไฟล์ config VPN](#สร้างไฟล์-config-vpn)
+    - [กรณี URL ที่ได้รับเป็น `https://ip-address:10443/vpn`](#กรณี-url-ที่ได้รับเป็น-httpsip-address10443vpn)
+    - [กรณี certificate ของ FortiGate ยังไม่ถูก trust](#กรณี-certificate-ของ-fortigate-ยังไม่ถูก-trust)
   - [ทดสอบเชื่อมต่อแบบ command line](#ทดสอบเชื่อมต่อแบบ-command-line)
   - [วิธีที่ 1: สร้างคำสั่งเปิด/ปิด VPN แบบ systemd](#วิธีที่-1-สร้างคำสั่งเปิดปิด-vpn-แบบ-systemd)
   - [วิธีที่ 2: สร้างสคริปต์เปิด/ปิด VPN แบบ command](#วิธีที่-2-สร้างสคริปต์เปิดปิด-vpn-แบบ-command)
@@ -20,6 +22,7 @@
   - [ทำให้กดปุ่มแล้วไม่ต้องถาม sudo password](#ทำให้กดปุ่มแล้วไม่ต้องถาม-sudo-password)
   - [ใช้งานกับ SAML/SSO หรือ OTP](#ใช้งานกับ-samlsso-หรือ-otp)
   - [Troubleshooting](#troubleshooting)
+    - [`Gateway certificate validation failed`](#gateway-certificate-validation-failed)
   - [ถอนการติดตั้ง](#ถอนการติดตั้ง)
   - [อ้างอิง](#อ้างอิง)
   - [เครดิต](#เครดิต)
@@ -309,7 +312,7 @@ mkdir -p ~/Desktop
 สร้างไฟล์ปุ่ม Connect:
 
 ```bash
-nano ~/Desktop/VPN-Connect.desktop
+vim ~/Desktop/VPN-Connect.desktop
 ```
 
 ใส่เนื้อหานี้:
@@ -328,7 +331,7 @@ Categories=Network;
 สร้างไฟล์ปุ่ม Disconnect:
 
 ```bash
-nano ~/Desktop/VPN-Disconnect.desktop
+vim ~/Desktop/VPN-Disconnect.desktop
 ```
 
 ใส่เนื้อหานี้:
