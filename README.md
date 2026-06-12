@@ -114,6 +114,28 @@ realm = vpn
 
 ถ้า `ip-address` ในตัวอย่างคือ IP จริง ให้ใส่เฉพาะ IP เช่น `192.0.2.10` หรือถ้าเป็นชื่อ DNS ให้ใส่เฉพาะชื่อ เช่น `vpn.example.com` ส่วน `/vpn` มักเป็น realm ของ FortiGate SSL VPN จึงใส่เป็น `realm = vpn`
 
+### กรณี certificate ของ FortiGate ยังไม่ถูก trust
+
+ถ้าเชื่อมต่อแล้วเจอ `Gateway certificate validation failed` ให้ตรวจสอบ certificate กับผู้ดูแลระบบก่อน ถ้าแน่ใจว่าเป็น FortiGate ขององค์กรจริง ให้คัดลอกค่า sha256 digest ที่ `openfortivpn` แสดง แล้วเพิ่มลงใน config:
+
+```ini
+trusted-cert = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+```
+
+ตัวอย่าง config สำหรับ URL `https://ip-address:10443/vpn` พร้อม certificate digest:
+
+```ini
+host = ip-address
+port = 10443
+username = my-vpn-user
+realm = vpn
+trusted-cert = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+```
+
+ค่า `aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa` เป็นค่า mock สำหรับตัวอย่างเท่านั้น ใช้งานจริงไม่ได้ ให้ใช้ digest ที่ `openfortivpn` แสดงจากเครื่องของคุณ
+
+ถ้า certificate ของ FortiGate ถูกเปลี่ยนหรือต่ออายุในอนาคต ค่า digest จะเปลี่ยนด้วย ต้องแก้ `trusted-cert` ในไฟล์ config ให้เป็นค่าใหม่
+
 ตั้ง permission ให้ไฟล์ config:
 
 ```bash
@@ -432,6 +454,40 @@ realm = vpn
 ```bash
 curl -vk https://ip-address:10443/vpn
 ```
+
+### `Gateway certificate validation failed`
+
+ถ้าเจอ error ลักษณะนี้:
+
+```text
+ERROR:  Gateway certificate validation failed, and the certificate digest is not in the local whitelist.
+ERROR:  or add this line to your configuration file:
+ERROR:      trusted-cert = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+```
+
+สาเหตุคือ certificate ของ FortiGate ยังไม่ได้อยู่ใน local whitelist ของ `openfortivpn` วิธีแก้คือเพิ่ม `trusted-cert` ลงใน `/etc/openfortivpn/company.conf`
+
+เปิดไฟล์ config:
+
+```bash
+sudo vim /etc/openfortivpn/company.conf
+```
+
+เพิ่มบรรทัดนี้ โดยใช้ค่า digest ที่เครื่องของคุณแสดง:
+
+```ini
+trusted-cert = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+```
+
+หรือทดสอบแบบชั่วคราวโดยส่งค่า digest ผ่าน command line:
+
+```bash
+sudo openfortivpn -c /etc/openfortivpn/company.conf --trusted-cert aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+```
+
+ค่า digest ในตัวอย่างเป็นค่า mock ให้เปลี่ยนเป็นค่าจริงที่โปรแกรมแสดงหลังคำว่า `trusted-cert =`
+
+เมื่อใส่ `trusted-cert` ใน config แล้ว คำสั่ง `vpn-up`, ปุ่ม Desktop, และ `fortivpn.service` จะใช้ค่า certificate นี้อัตโนมัติ
 
 ตรวจสอบ log:
 
