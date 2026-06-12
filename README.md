@@ -78,7 +78,7 @@ sudo install -d -m 700 /etc/openfortivpn
 สร้างไฟล์ config:
 
 ```bash
-sudo nano /etc/openfortivpn/company.conf
+sudo vim /etc/openfortivpn/company.conf
 ```
 
 ใส่ค่าตัวอย่างนี้ แล้วแก้ให้ตรงกับระบบของคุณ:
@@ -135,7 +135,7 @@ ip route
 สร้าง service:
 
 ```bash
-sudo nano /etc/systemd/system/fortivpn.service
+sudo vim /etc/systemd/system/fortivpn.service
 ```
 
 ใส่เนื้อหานี้:
@@ -205,7 +205,7 @@ sudo systemctl disable fortivpn.service
 สร้างสคริปต์เปิด VPN:
 
 ```bash
-sudo nano /usr/local/bin/vpn-up
+sudo vim /usr/local/bin/vpn-up
 ```
 
 ใส่เนื้อหานี้:
@@ -227,7 +227,7 @@ sudo /usr/bin/openfortivpn -c "$CONFIG"
 สร้างสคริปต์ปิด VPN:
 
 ```bash
-sudo nano /usr/local/bin/vpn-down
+sudo vim /usr/local/bin/vpn-down
 ```
 
 ใส่เนื้อหานี้:
